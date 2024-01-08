@@ -15,12 +15,25 @@ async def get_start_text() -> str:
         now = datetime.now (TZ)
         last_task_start = datetime.combine (last_task.date, last_task.time)
         time_work = now - TZ.localize(last_task_start)
-        time_work_str = process_duration(round(time_work.total_seconds() / 60))
+
+        work_min = round(time_work.total_seconds() / 60)
+
+        if task_info[0].duration:
+            today_duration = task_info[0].duration + work_min
+        else:
+            today_duration = work_min
+
+        if global_info [0].duration:
+            global_duration = global_info [0].duration + today_duration
+
+        else:
+            global_duration = today_duration
+
         text = (
             f'<b>Работаешь над:</b> {last_task.name}\n'
-            f'<b>Всего:</b> {global_info[0].duration}\n'
-            f'<b>Сегодня:</b> {task_info[0].duration}\n'
-            f'<b>Уже:</b> {time_work_str}'
+            f'<b>Всего:</b> {process_duration(global_duration)}\n'
+            f'<b>Сегодня:</b> {process_duration(today_duration)}\n'
+            f'<b>Уже:</b> {process_duration(work_min)}'
         )
     else:
         text = f'<b>Нет текущих задач</b>'
