@@ -31,15 +31,20 @@ async def add_new_task(msg: Message, state: FSMContext):
     data = await state.get_data()
     await state.clear()
 
-    await db.add_task(user_id=msg.from_user.id, name=msg.text)
+    added = await db.add_task(user_id=msg.from_user.id, name=msg.text)
 
-    await bot.delete_message(chat_id=msg.chat.id, message_id=data['back_message_id'])
+    if added:
 
-    tasks = await db.get_all_task ()
-    text = await get_start_text ()
-    await bot.edit_message_text(
-        chat_id=msg.chat.id,
-        message_id=data['base_message_id'],
-        text=text,
-        reply_markup=kb.get_start_kb(tasks)
-    )
+        await bot.delete_message(chat_id=msg.chat.id, message_id=data['back_message_id'])
+
+        tasks = await db.get_all_task ()
+        text = await get_start_text ()
+        await bot.edit_message_text(
+            chat_id=msg.chat.id,
+            message_id=data['base_message_id'],
+            text=text,
+            reply_markup=kb.get_start_kb(tasks)
+        )
+    else:
+        await msg.answer('Не удалось')
+        

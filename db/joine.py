@@ -51,15 +51,8 @@ async def get_last_task() -> LastTaskRow:
 
 
 # дневной отчёт
-async def get_daily_report() -> tuple[ReportDailyRow]:
+async def get_daily_report(task_id: int = 0) -> tuple[ReportDailyRow]:
     today = datetime.now(TZ).date()
-    # query = (sa.select(
-    #     SessionTable.c.date,
-    #     TaskTable.c.name,
-    #     sa.sum(SessionTable.c.duration).label('duration')
-    # ).select_from(SessionTable.join (TaskTable, SessionTable.c.task_id == TaskTable.c.id)).
-    #          group_by(SessionTable.c.date, TaskTable.c.name)).where(SessionTable.c.date == today)
-
     query = (
         sa.select (
             SessionTable.c.date,
@@ -71,6 +64,9 @@ async def get_daily_report() -> tuple[ReportDailyRow]:
         .where (SessionTable.c.date == today)
     )
 
+    if task_id != 0:
+        query = query.where(SessionTable.c.task_id == task_id)
+
     async with begin_connection () as conn:
         result = await conn.execute (query)
 
@@ -78,13 +74,16 @@ async def get_daily_report() -> tuple[ReportDailyRow]:
 
 
 # дневной отчёт
-async def get_global_report() -> tuple[ReportGlobalRow]:
+async def get_global_report(task_id: int = 0) -> tuple[ReportGlobalRow]:
     query = (sa.select(
         TaskTable.c.create_at,
         TaskTable.c.name,
         sa.func.sum(SessionTable.c.duration).label('duration')
     ).select_from(SessionTable.join (TaskTable, SessionTable.c.task_id == TaskTable.c.id)).
              group_by(TaskTable.c.create_at, TaskTable.c.name)).order_by(sa.desc(TaskTable.c.create_at))
+
+    if task_id != 0:
+        query = query.where(SessionTable.c.task_id == task_id)
 
     async with begin_connection () as conn:
         result = await conn.execute (query)

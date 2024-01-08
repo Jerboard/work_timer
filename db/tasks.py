@@ -1,7 +1,6 @@
 import sqlalchemy as sa
 import typing as t
-import logging
-
+from sqlalchemy.exc import OperationalError
 from datetime import datetime, date, timedelta, time
 
 from init import TZ, log_error
@@ -37,13 +36,18 @@ async def get_all_task() -> tuple[TaskRow]:
 
 
 # добавить задачу
-async def add_task(user_id: int, name: str) -> None:
-    async with begin_connection() as conn:
-        await conn.execute(
-            TaskTable.insert().values(
-                user_id=user_id,
-                create_at=datetime.now(TZ),
-                name=name,
-                status='active'
+async def add_task(user_id: int, name: str) -> bool:
+    try:
+        async with begin_connection() as conn:
+            await conn.execute(
+                TaskTable.insert().values(
+                    user_id=user_id,
+                    create_at=datetime.now(TZ),
+                    name=name,
+                    status='active'
+                )
             )
-        )
+        return True
+    except OperationalError as ex:
+        log_error(ex)
+        return False
