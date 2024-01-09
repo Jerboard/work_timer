@@ -51,7 +51,7 @@ async def edit_task(cb: CallbackQuery):
             last_task_start = datetime.combine (last_task.date, last_task.time)
             await db.close_last_task(
                 time_start=last_task_start,
-                session_id=last_task.task_id
+                session_id=last_task.session_id
             )
 
         await db.start_new_session(task_id)

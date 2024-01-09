@@ -24,10 +24,9 @@ async def get_start_text() -> str:
             today_duration = work_min
 
         if global_info [0].duration:
-            global_duration = global_info [0].duration + today_duration
-
+            global_duration = global_info [0].duration + work_min
         else:
-            global_duration = today_duration
+            global_duration = work_min
 
         text = (
             f'<b>Работаешь над:</b> {last_task.name}\n'
