@@ -29,7 +29,7 @@ async def get_start_text() -> str:
             global_duration = work_min
 
         text = (
-            f'<b>Работаешь над:</b> {last_task.name}\n'
+            f'<b>В работе:</b> {last_task.name}\n'
             f'<b>Всего:</b> {process_duration(global_duration)}\n'
             f'<b>Сегодня:</b> {process_duration(today_duration)}\n'
             f'<b>Уже:</b> {process_duration(work_min)}'
