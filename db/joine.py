@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 import typing as t
 
-from datetime import date, time, datetime
+from datetime import date, time, datetime, timedelta
 
 from init import TZ
 from .base import begin_connection
@@ -61,7 +61,8 @@ async def get_daily_report(task_id: int = 0) -> tuple[ReportDailyRow]:
         )
         .select_from (SessionTable.join (TaskTable, SessionTable.c.task_id == TaskTable.c.id))
         .group_by (SessionTable.c.date, TaskTable.c.name)
-        .where (SessionTable.c.date == today)
+        .where (SessionTable.c.in_google == False)
+        # .where (SessionTable.c.date == today)
     )
 
     if task_id != 0:

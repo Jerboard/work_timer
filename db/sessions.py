@@ -14,6 +14,7 @@ class SessionRow(t.Protocol):
     date: date
     time: time
     duration: int
+    in_google: bool
 
 
 SessionTable = sa.Table(
@@ -24,6 +25,8 @@ SessionTable = sa.Table(
     sa.Column('date', sa.Date()),
     sa.Column('time', sa.Time()),
     sa.Column('duration', sa.Integer()),
+    sa.Column('in_google', sa.Boolean),
+
 )
 
 
@@ -47,4 +50,13 @@ async def start_new_session(task_id: int):
                 task_id=task_id,
                 date=now.date(),
                 time=now.time(),
+            ))
+
+
+# отмечает все сессии как добавленные в гугл
+async def in_google_all_tasks():
+    async with begin_connection() as conn:
+        await conn.execute(
+            SessionTable.update().values(
+                in_google=True
             ))

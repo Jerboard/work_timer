@@ -17,7 +17,7 @@ from utils.google_api import send_daily_report_in_table, send_global_report_in_t
 # начинает задачу
 @dp.callback_query(lambda cb: cb.data.startswith('report_daily'))
 async def new_task(cb: CallbackQuery, state: FSMContext):
-    sent  = await cb.message.answer('⏳')
+    sent = await cb.message.answer('⏳')
     daily_report = await db.get_daily_report()
 
     in_table_daily = []
@@ -27,6 +27,7 @@ async def new_task(cb: CallbackQuery, state: FSMContext):
         )
 
     await send_daily_report_in_table(in_table_daily)
+    await db.in_google_all_tasks()
 
     global_report = await db.get_global_report ()
 
