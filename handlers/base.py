@@ -1,7 +1,7 @@
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import default_state
+from aiogram.exceptions import TelegramBadRequest
 
 
 import json
@@ -28,6 +28,18 @@ async def com_start(msg: Message, state: FSMContext):
     tasks = await db.get_all_task()
 
     await msg.answer(text, reply_markup=kb.get_start_kb(tasks))
+
+
+# возвращает стартовый экран
+@dp.callback_query(lambda cb: cb.data.startswith('back_start'))
+async def edit_task(cb: CallbackQuery, state: FSMContext):
+    await state.clear ()
+    text = await get_start_text ()
+    tasks = await db.get_all_task ()
+    try:
+        await cb.message.edit_text (text, reply_markup=kb.get_start_kb (tasks))
+    except TelegramBadRequest as ex:
+        await cb.answer('Нечего обновлять')
 
 
 # начинает задачу

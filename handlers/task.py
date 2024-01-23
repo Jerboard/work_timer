@@ -1,5 +1,5 @@
 from aiogram.types import Message, CallbackQuery
-from aiogram.filters import StateFilter, Command
+from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 
@@ -11,6 +11,22 @@ import db
 from init import dp, TZ, bot
 from keyboards import inline_kb as kb
 from utils.texts import get_start_text
+
+
+# команда старт
+@dp.message(Command('edit_task'))
+async def com_start(msg: Message, state: FSMContext):
+    await state.clear()
+    text = 'Выбор действия'
+    await msg.answer(text, reply_markup=kb.get_edit_task_kb())
+
+
+# возвращает к начинает задачу
+@dp.callback_query(lambda cb: cb.data.startswith('back_edit_task'))
+async def new_task(cb: CallbackQuery, state: FSMContext):
+    await state.clear ()
+    text = 'Выбор действия'
+    await cb.message.edit_text (text, reply_markup=kb.get_edit_task_kb ())
 
 
 # начинает задачу
@@ -47,4 +63,18 @@ async def add_new_task(msg: Message, state: FSMContext):
         )
     else:
         await msg.answer('Не удалось')
-        
+
+
+# отключить задачу
+@dp.callback_query(lambda cb: cb.data.startswith('inactive_task'))
+async def new_task(cb: CallbackQuery, state: FSMContext):
+    _, task_id = cb.data.split(':')
+
+    if task_id == 'choice':
+        tasks = await db.get_all_task ()
+        await cb.message.edit_text('Выберите задачу', reply_markup=kb.get_make_inactive_task_kb(tasks))
+
+    else:
+        await db.update_task(task_id=int(task_id), status='done')
+        text = 'Выбор действия'
+        await cb.message.edit_text (text, reply_markup=kb.get_edit_task_kb())

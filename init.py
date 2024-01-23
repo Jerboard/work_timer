@@ -40,6 +40,8 @@ async def set_main_menu() -> None:
     main_menu_commands = [
         BotCommand (command='/start',
                     description='Меню'),
+        BotCommand (command='/edit_task',
+                    description='Таски'),
     ]
 
     await bot.set_my_commands (main_menu_commands)

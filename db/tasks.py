@@ -51,3 +51,15 @@ async def add_task(user_id: int, name: str) -> bool:
     except OperationalError as ex:
         log_error(ex)
         return False
+
+
+# изменить задачу
+async def update_task(task_id: int, name: str = None, status: str = None) -> None:
+    query = TaskTable.update().where(TaskTable.c.id == task_id)
+    if name:
+        query = query.values(name=name)
+    if status:
+        query = query.values (status=status)
+
+    async with begin_connection() as conn:
+        await conn.execute(query)
