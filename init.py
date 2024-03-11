@@ -27,6 +27,7 @@ loop = asyncio.get_event_loop ()
 dp = Dispatcher ()
 bot = Bot (getenv ("TOKEN"), parse_mode=ParseMode.HTML)
 
+DEBUG = bool(int(getenv('DEBUG')))
 TZ = timezone ('Asia/Tbilisi')
 DATETIME_STR_FORMAT = '%d.%m.%y %H:%M'
 DATE_STR_FORMAT = '%d.%m.%y'

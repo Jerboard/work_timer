@@ -10,14 +10,18 @@ METADATA = sa.MetaData()
 
 
 def begin_connection() -> t.AsyncContextManager[AsyncConnection]:
-    pool = ENGINE.pool
-    active_connections = pool.checkedout ()
-    available_connections = pool.checkedin ()
-    logging.warning (f"Количество активных соединений: {active_connections}")
-    logging.warning (f"Количество соединений в пуле: {available_connections}")
+    # pool = ENGINE.pool
+    # active_connections = pool.checkedout ()
+    # available_connections = pool.checkedin ()
+    # logging.warning (f"Количество активных соединений: {active_connections}")
+    # logging.warning (f"Количество соединений в пуле: {available_connections}")
 
+    logging.warning (f"start")
     ENGINE.connect ()
-    return ENGINE.begin ()
+    logging.warning (f"connect")
+    conn = ENGINE.begin()
+    logging.warning (f"begin")
+    return conn
 
 
 async def init_models():
