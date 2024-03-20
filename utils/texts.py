@@ -18,7 +18,7 @@ async def get_start_text() -> str:
 
         work_min = round(time_work.total_seconds() / 60)
 
-        if task_info[0].duration:
+        if task_info and task_info[0].duration:
             today_duration = task_info[0].duration + work_min
         else:
             today_duration = work_min

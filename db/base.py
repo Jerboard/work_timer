@@ -16,11 +16,8 @@ def begin_connection() -> t.AsyncContextManager[AsyncConnection]:
     # logging.warning (f"Количество активных соединений: {active_connections}")
     # logging.warning (f"Количество соединений в пуле: {available_connections}")
 
-    logging.warning (f"start")
     ENGINE.connect ()
-    logging.warning (f"connect")
     conn = ENGINE.begin()
-    logging.warning (f"begin")
     return conn
 
 

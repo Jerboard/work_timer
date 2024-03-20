@@ -66,7 +66,8 @@ async def get_daily_report(task_id: int = 0) -> tuple[ReportDailyRow]:
 
     if task_id != 0:
         today = datetime.now (TZ).date ()
-        query = query.where(SessionTable.c.task_id == task_id, SessionTable.c.date == today)
+        # query = query.where(SessionTable.c.task_id == task_id, SessionTable.c.date == today)
+        query = query.where(SessionTable.c.task_id == task_id, SessionTable.c.in_google == False)
     else:
         query = query.where (SessionTable.c.in_google == False)
 
