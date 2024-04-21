@@ -20,7 +20,7 @@ TaskTable = sa.Table(
     METADATA,
     sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
     sa.Column('user_id', sa.BigInteger()),
-    sa.Column('create_at', sa.DateTime()),
+    sa.Column('create_at', sa.DateTime(timezone=True)),
     sa.Column('name', sa.String(255)),
     sa.Column('status', sa.String(255)),
 )
