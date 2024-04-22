@@ -1,6 +1,5 @@
 import sqlalchemy as sa
 import typing as t
-import logging
 
 from datetime import datetime, date, timedelta, time
 
@@ -49,7 +48,7 @@ async def start_new_session(task_id: int):
             SessionTable.insert().values(
                 task_id=task_id,
                 date=now.date(),
-                time=now.time(),
+                time=now.time().replace(microsecond=0),
             ))
 
 
