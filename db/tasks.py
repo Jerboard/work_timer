@@ -42,7 +42,7 @@ async def add_task(user_id: int, name: str) -> bool:
             await conn.execute(
                 TaskTable.insert().values(
                     user_id=user_id,
-                    create_at=datetime.now(TZ),
+                    create_at=datetime.now(TZ).replace(microsecond=0),
                     name=name,
                     status='active'
                 )
