@@ -17,12 +17,13 @@ async def get_start_text() -> str:
         time_work = now - TZ.localize(last_task_start)
 
         work_min = round(time_work.total_seconds() / 60)
-
+        print(task_info)
         if task_info and task_info[0].duration:
             today_duration = task_info[0].duration + work_min
         else:
             today_duration = work_min
 
+        print(today_duration)
         if global_info [0].duration:
             global_duration = global_info [0].duration + work_min
         else:

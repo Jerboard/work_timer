@@ -24,9 +24,7 @@ SessionTable = sa.Table(
     sa.Column('date', sa.Date()),
     sa.Column('time', sa.Time()),
     sa.Column('duration', sa.Integer()),
-    sa.Column('in_google', sa.Boolean),
-
-)
+    sa.Column('in_google', sa.Boolean, default=False))
 
 
 # закрывает текущую задачу
