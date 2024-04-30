@@ -39,10 +39,9 @@ FILE_GOOGLE = getenv('FILE_GOOGLE')
 
 async def set_main_menu() -> None:
     main_menu_commands = [
-        BotCommand (command='/start',
-                    description='Меню'),
-        BotCommand (command='/edit_task',
-                    description='Таски'),
+        BotCommand (command='/start', description='Меню'),
+        BotCommand (command='/edit_task', description='Таски'),
+        BotCommand (command='/pass_gen', description='Создать пароль'),
     ]
 
     await bot.set_my_commands (main_menu_commands)

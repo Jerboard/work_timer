@@ -1,11 +1,12 @@
 from aiogram.types import Message, CallbackQuery
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram.exceptions import TelegramBadRequest
 
 
 import json
 from datetime import datetime
+from random import choice
 
 import db
 from init import dp, TZ, bot
@@ -80,3 +81,10 @@ async def edit_task(cb: CallbackQuery):
 async def edit_task(cb: CallbackQuery, state: FSMContext):
     await state.clear()
     await cb.message.delete()
+
+
+# команда старт
+@dp.message(Command('pass_gen'))
+async def password_gen(msg: Message, state: FSMContext):
+    password = ''.join([choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') for _ in range(8)])
+    await msg.answer(f'<code>{password}</code>')
